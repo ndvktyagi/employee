@@ -1,5 +1,6 @@
 package com.digithon.hr.entity;
 
+import com.digithon.hr.security.PiEncryptedStringConverter;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -18,7 +19,9 @@ public class Employee {
     @Column(name = "first_name_enc", insertable = false, updatable = false)
     private String firstNameEncrypted;
 
-    @Column(name = "last_name", nullable = false, length = 80)
+    // PI Co-Pilot: stored encrypted in "last_name_enc"; the plain column "last_name" is retired.
+    @Column(name = "last_name_enc", nullable = false)
+    @Convert(converter = PiEncryptedStringConverter.class)
     private String lastName;
 
     @Column(nullable = false, length = 180)
