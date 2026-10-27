@@ -19,13 +19,10 @@ public class Employee {
     @Column(name = "first_name_enc", insertable = false, updatable = false)
     private String firstNameEncrypted;
 
-    @Column(name = "last_name", nullable = false, length = 80)
-    private String lastName;
-
-    // PI Co-Pilot: encrypted copy of "last_name". Written on every save; lastName is read from it.
-    @Column(name = "last_name_enc")
+    // PI Co-Pilot: stored encrypted in "last_name_enc"; the plain column "last_name" is retired.
+    @Column(name = "last_name_enc", nullable = false)
     @Convert(converter = PiEncryptedStringConverter.class)
-    private String lastNameEncrypted;
+    private String lastName;
 
     @Column(nullable = false, length = 180)
     private String email;
@@ -72,18 +69,5 @@ public class Employee {
         this.phone = phone;
         this.department = department;
         this.joiningDate = joiningDate;
-    }
-
-    // PI Co-Pilot: keeps the encrypted copies of personal data current.
-    @PrePersist
-    @PreUpdate
-    void piCopilotEncrypt() {
-        this.lastNameEncrypted = this.lastName; // PI Co-Pilot
-    }
-
-    // PI Co-Pilot: personal data is read from the encrypted copies.
-    @PostLoad
-    void piCopilotDecrypt() {
-        if (this.lastNameEncrypted != null) this.lastName = this.lastNameEncrypted; // PI Co-Pilot
     }
 }
