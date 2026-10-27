@@ -32,6 +32,11 @@ public class Employee {
     @Column(name = "email_enc", insertable = false, updatable = false)
     private String emailEncrypted;
 
+    // PI Co-Pilot: encrypted copy of "email_enc". Written on every save; emailEncrypted is read from it.
+    @Column(name = "email_enc_enc")
+    @Convert(converter = PiEncryptedStringConverter.class)
+    private String emailEncryptedEncrypted;
+
     // Personal data used for the future DPDP scanning demonstration.
     @Column(length = 25)
     private String phone;
@@ -69,5 +74,18 @@ public class Employee {
         this.phone = phone;
         this.department = department;
         this.joiningDate = joiningDate;
+    }
+
+    // PI Co-Pilot: keeps the encrypted copies of personal data current.
+    @PrePersist
+    @PreUpdate
+    void piCopilotEncrypt() {
+        this.emailEncryptedEncrypted = this.emailEncrypted; // PI Co-Pilot
+    }
+
+    // PI Co-Pilot: personal data is read from the encrypted copies.
+    @PostLoad
+    void piCopilotDecrypt() {
+        if (this.emailEncryptedEncrypted != null) this.emailEncrypted = this.emailEncryptedEncrypted; // PI Co-Pilot
     }
 }
