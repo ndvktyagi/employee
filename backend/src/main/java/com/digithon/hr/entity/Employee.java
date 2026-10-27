@@ -13,6 +13,11 @@ public class Employee {
     @Column(name = "first_name", nullable = false, length = 80)
     private String firstName;
 
+    // PI Co-Pilot: encrypted copy of "first_name". Read-only for Hibernate, so existing saves are unchanged;
+    // it is written on every save and read only while encrypted read is on.
+    @Column(name = "first_name_enc", insertable = false, updatable = false)
+    private String firstNameEncrypted;
+
     @Column(name = "last_name", nullable = false, length = 80)
     private String lastName;
 
