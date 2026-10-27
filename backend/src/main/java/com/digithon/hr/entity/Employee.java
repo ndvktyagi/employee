@@ -24,6 +24,11 @@ public class Employee {
     @Column(nullable = false, length = 180)
     private String email;
 
+    // PI Co-Pilot: encrypted copy of "email". Read-only for Hibernate, so existing saves are unchanged;
+    // it is written on every save and read only while encrypted read is on.
+    @Column(name = "email_enc", insertable = false, updatable = false)
+    private String emailEncrypted;
+
     // Personal data used for the future DPDP scanning demonstration.
     @Column(length = 25)
     private String phone;
