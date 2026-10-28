@@ -67,4 +67,17 @@ public class Employee {
         this.department = department;
         this.joiningDate = joiningDate;
     }
+
+    // PI Co-Pilot: keeps the encrypted copies of personal data current.
+    @PrePersist
+    @PreUpdate
+    void piCopilotEncrypt() {
+        this.emailEncrypted = this.email; // PI Co-Pilot
+    }
+
+    // PI Co-Pilot: personal data is read from the encrypted copies.
+    @PostLoad
+    void piCopilotDecrypt() {
+        if (this.emailEncrypted != null) this.email = this.emailEncrypted; // PI Co-Pilot
+    }
 }
