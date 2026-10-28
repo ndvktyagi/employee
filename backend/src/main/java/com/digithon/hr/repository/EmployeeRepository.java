@@ -13,7 +13,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     /** Fetch all employees joined with department using native SQL. */
     @Query(value = """
-        SELECT e.id, e.first_name, e.last_name, e.email, e.phone,
+        SELECT e.id, e.first_name_enc AS first_name, e.last_name, e.email_enc AS email, e.phone,
                d.id AS department_id, d.name AS department_name, e.joining_date
         FROM employees e
         INNER JOIN departments d ON e.department_id = d.id
@@ -22,7 +22,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     /** Fetch a single employee by ID joined with department using native SQL. */
     @Query(value = """
-        SELECT e.id, e.first_name, e.last_name, e.email, e.phone,
+        SELECT e.id, e.first_name_enc AS first_name, e.last_name, e.email_enc AS email, e.phone,
                d.id AS department_id, d.name AS department_name, e.joining_date
         FROM employees e
         INNER JOIN departments d ON e.department_id = d.id

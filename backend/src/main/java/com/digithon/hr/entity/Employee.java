@@ -1,22 +1,27 @@
 package com.digithon.hr.entity;
 
+import com.digithon.hr.security.PiEncryptedStringConverter;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "employees", uniqueConstraints = @UniqueConstraint(name = "uk_employees_email", columnNames = "email"))
+@Table(name = "employees")
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", nullable = false, length = 80)
+    // PI Co-Pilot: stored encrypted in "first_name_enc"; the plain column "first_name" is retired.
+    @Column(name = "first_name_enc", nullable = false)
+    @Convert(converter = PiEncryptedStringConverter.class)
     private String firstName;
 
     @Column(name = "last_name", nullable = false, length = 80)
     private String lastName;
 
-    @Column(nullable = false, length = 180)
+    // PI Co-Pilot: stored encrypted in "email_enc"; the plain column "email" is retired.
+    @Column(name = "email_enc", nullable = false)
+    @Convert(converter = PiEncryptedStringConverter.class)
     private String email;
 
     // Personal data used for the future DPDP scanning demonstration.
