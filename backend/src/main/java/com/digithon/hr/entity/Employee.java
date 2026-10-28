@@ -11,13 +11,10 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", nullable = false, length = 80)
+    // PI Co-Pilot: stored encrypted in "first_name_enc"; the plain column "first_name" is retired.
+    @Column(name = "first_name_enc", nullable = false)
+    @Convert(converter = PiEncryptedStringConverter.class)
     private String firstName;
-
-    // PI Co-Pilot: encrypted copy of "first_name". Read-only for Hibernate, so existing saves are unchanged;
-    // it is written on every save and read only while encrypted read is on.
-    @Column(name = "first_name_enc", insertable = false, updatable = false)
-    private String firstNameEncrypted;
 
     // PI Co-Pilot: stored encrypted in "last_name_enc"; the plain column "last_name" is retired.
     @Column(name = "last_name_enc", nullable = false)
